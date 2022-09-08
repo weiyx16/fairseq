@@ -738,7 +738,7 @@ class Trainer(object):
             seed=self.cfg.common.seed,
             num_shards=self.data_parallel_world_size,
             shard_id=self.data_parallel_rank,
-            num_workers=self.cfg.dataset.num_workers,
+            num_workers=0, #self.cfg.dataset.num_workers,
             # always pass a fixed "epoch" to keep validation data consistent
             # across training epochs
             epoch=1,
