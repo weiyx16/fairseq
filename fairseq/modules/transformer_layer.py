@@ -66,7 +66,7 @@ class TransformerEncoderLayerBase(nn.Module):
         )
 
         self.final_layer_norm = LayerNorm(self.embed_dim, export=cfg.export)
-        dpr = [x.item() for x in torch.linspace(0, cfg.encoder.droppath, cfg.encoder.layers)]
+        dpr = [x.item() for x in torch.linspace(0, cfg.droppath, cfg.encoder.layers)]
         self.drop_path = DropPath(dpr[layer_id]) if dpr[layer_id] > 0. else nn.Identity()
 
     def build_fc1(self, input_dim, output_dim, q_noise, qn_block_size):
