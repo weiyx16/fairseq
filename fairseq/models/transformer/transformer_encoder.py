@@ -93,7 +93,7 @@ class TransformerEncoderBase(FairseqEncoder):
         else:
             self.layers = nn.ModuleList([])
         self.layers.extend(
-            [self.build_encoder_layer(cfg) for i in range(cfg.encoder.layers)]
+            [self.build_encoder_layer(cfg, layer_id=i) for i in range(cfg.encoder.layers)]
         )
         self.num_layers = len(self.layers)
 
@@ -102,9 +102,9 @@ class TransformerEncoderBase(FairseqEncoder):
         else:
             self.layer_norm = None
 
-    def build_encoder_layer(self, cfg):
+    def build_encoder_layer(self, cfg, layer_id=0):
         layer = transformer_layer.TransformerEncoderLayerBase(
-            cfg, return_fc=self.return_fc
+            cfg, return_fc=self.return_fc, layer_id=layer_id
         )
         checkpoint = cfg.checkpoint_activations
         if checkpoint:

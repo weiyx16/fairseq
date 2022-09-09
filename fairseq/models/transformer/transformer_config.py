@@ -100,6 +100,7 @@ class TransformerConfig(FairseqDataclass):
         metadata={"help": "activation function to use"},
     )
     dropout: float = field(default=0.1, metadata={"help": "dropout probability"})
+    droppath: float = field(default=0.0, metadata={"help": "droppath probability"})
     attention_dropout: float = field(
         default=0.0, metadata={"help": "dropout probability for attention weights"}
     )

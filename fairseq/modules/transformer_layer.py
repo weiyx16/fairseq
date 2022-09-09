@@ -14,7 +14,7 @@ from fairseq.models.transformer import TransformerConfig
 from fairseq.modules import LayerNorm, MultiheadAttention
 from fairseq.modules.fairseq_dropout import FairseqDropout
 from fairseq.modules.quant_noise import quant_noise
-
+from timm.models.layers import DropPath
 
 class TransformerEncoderLayerBase(nn.Module):
     """Encoder layer block.
@@ -31,7 +31,7 @@ class TransformerEncoderLayerBase(nn.Module):
         args (argparse.Namespace): parsed command-line arguments
     """
 
-    def __init__(self, cfg, return_fc=False):
+    def __init__(self, cfg, return_fc=False, layer_id=0):
         super().__init__()
         self.cfg = cfg
         self.return_fc = return_fc
@@ -66,6 +66,8 @@ class TransformerEncoderLayerBase(nn.Module):
         )
 
         self.final_layer_norm = LayerNorm(self.embed_dim, export=cfg.export)
+        dpr = [x.item() for x in torch.linspace(0, cfg.encoder.droppath, cfg.encoder.layers)]
+        self.drop_path = DropPath(dpr[layer_id]) if dpr[layer_id] > 0. else nn.Identity()
 
     def build_fc1(self, input_dim, output_dim, q_noise, qn_block_size):
         return quant_noise(
@@ -144,7 +146,7 @@ class TransformerEncoderLayerBase(nn.Module):
         )
 
     def residual_connection(self, x, residual):
-        return residual + x
+        return residual + self.drop_path(x)
 
     def upgrade_state_dict_named(self, state_dict, name):
         """
