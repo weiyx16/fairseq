@@ -358,7 +358,7 @@ class TransformerEncoder(TransformerEncoderBase):
             return_fc=return_fc,
         )
 
-    def build_encoder_layer(self, args):
+    def build_encoder_layer(self, args, layer_id=0):
         return super().build_encoder_layer(
-            TransformerConfig.from_namespace(args),
+            TransformerConfig.from_namespace(args), layer_id=layer_id
         )
