@@ -36,6 +36,7 @@ dataset:
   batch_size: 32
   required_batch_size_multiple: 1
   max_tokens: 4400
+  valid_subset: valid,valid1
 
 optimizer:
   _name: adam
