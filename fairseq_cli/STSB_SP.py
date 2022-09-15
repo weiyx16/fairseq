@@ -29,5 +29,5 @@ if __name__ == '__main__':
             gold.append(target)
             pred.append(predictions.item())
 
-    print('| Pearson: ', pearsonr(gold, pred))
-    print('| Spearman: ', spearmanr(gold, pred))
+    print('| Pearson: ', pearsonr(gold, pred)[0])
+    print('| Spearman: ', spearmanr(gold, pred)[0])
